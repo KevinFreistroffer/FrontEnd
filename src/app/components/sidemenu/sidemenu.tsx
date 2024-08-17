@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import Link from "next/link";
 import { GlobalContext } from "@/app/wrapper";
 import { usePathname } from "next/navigation";
-import { publicRoutes } from "@/app/routes";
+import { publicRoutes, routes } from "@/routes";
 
 const SideMenu = forwardRef<HTMLDivElement>((props, ref) => {
   const pathname = usePathname();
@@ -16,20 +16,18 @@ const SideMenu = forwardRef<HTMLDivElement>((props, ref) => {
         id={styles["nav"]}
         className="flex align-center flex-col p-0 m-0 content-center"
       >
-        {publicRoutes.map(
-          ({ path, display }: { path: string; display: string }) => (
-            <Link
-              key={path}
-              href={path}
-              className={`mx-2 content-center  mx-2 ${
-                pathname === path ? "font-bold" : "font-light"
-              }`}
-              onClick={() => toggleMenu(false)}
-            >
-              {display}
-            </Link>
-          )
-        )}
+        {routes.map(({ path, display }: { path: string; display: string }) => (
+          <Link
+            key={path}
+            href={path}
+            className={`mx-2 content-center  mx-2 ${
+              pathname === path ? "font-bold" : "font-light"
+            }`}
+            onClick={() => toggleMenu(false)}
+          >
+            {display}
+          </Link>
+        ))}
       </nav>
     </div>
   );

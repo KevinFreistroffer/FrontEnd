@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
-import { ISessionPayload } from "./lib/definitions";
+import { ISessionPayload } from "./app/lib/definitions";
 import CryptoJS from "crypto-js";
+import { cookies } from "next/headers";
 
 export const encrypt = (data: any): string | Error => {
   try {
@@ -54,8 +55,18 @@ export const hashValue = async (value: any): Promise<string | Error> => {
   }
 };
 
-export const validateSession = async (sessionPayload: ISessionPayload) => {
-  await bcrypt.compare(sessionPayload.user.id, sessionPayload.user.id);
+export const validateSession = async (): Promise<boolean> => {
+  // 3. Decrypt the session from the cookie
+  const cookie = cookies().get("session")?.value;
+  const session = await decrypt(cookie);
+  console.log("middleware session", session);
+
+  // 5. Redirect to /login if the user is not authenticated
+  if (!session?.userId) {
+    return false;
+  }
+
+  return true;
 };
 
 export const handleCaughtError = (error: any) => {

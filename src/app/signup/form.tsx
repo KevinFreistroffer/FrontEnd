@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { signup } from "../../actions/auth";
+import { signup } from "../actions/auth";
 import Input from "./input";
 import styles from "./styles.module.css";
 // import "../../envConfig";

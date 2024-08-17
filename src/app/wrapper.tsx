@@ -1,7 +1,7 @@
 "use client";
 
-import Header from "@/components/header/header";
-import SideMenu from "@/components/sidemenu/sidemenu";
+import Header from "@/app/components/header/header";
+import SideMenu from "@/app/components/sidemenu/sidemenu";
 import Link from "next/link";
 import React, {
   Dispatch,
@@ -13,7 +13,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useClickOutside } from "../hooks/useOnOutsideClick";
+import { useClickOutside } from "@/app/hooks/useOnOutsideClick";
 import { Inter } from "next/font/google";
 
 interface WrapperProps {
@@ -36,9 +36,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 const Wrapper = ({
   children,
+  userSession,
 }: {
   children: React.ReactNode | React.ReactNode[];
+  userSession: boolean;
 }): JSX.Element => {
+  console.log("Wrapper userSession", userSession);
   const [showMenu, toggleMenu] = React.useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside(ref, () => {
@@ -73,11 +76,11 @@ const Wrapper = ({
           toggleMenu,
         }}
       >
-        <Header />
+        {/* <Header /> */}
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
           {children}
         </main>
-        {showMenu && <SideMenu ref={ref} />}
+        {/* {showMenu && <SideMenu ref={ref} />} */}
       </GlobalContext.Provider>
     </div>
   );
