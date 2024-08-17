@@ -1,0 +1,22 @@
+#header {
+  height: 77px;
+  box-shadow: 0 0 6px rgb(167, 167, 167);
+  color: var(--purple);
+}
+
+#nav {
+  display: none;
+}
+
+#menu-button {
+  display: block;
+}
+
+@media only screen and (min-width: 769px) {
+  #nav {
+    display: block;
+  }
+  #menu-button {
+    display: none;
+  }
+}
