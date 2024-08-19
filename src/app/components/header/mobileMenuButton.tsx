@@ -2,10 +2,12 @@
 
 import React, { useContext } from "react";
 import styles from "./styles.module.css";
-import { GlobalContext } from "@/app/wrapper";
 
-const MobileMenuButton = () => {
-  const { toggleMenu } = useContext(GlobalContext);
+const MobileMenuButton = ({
+  toggleMenu,
+}: {
+  toggleMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <button
       id={styles["menu-button"]}

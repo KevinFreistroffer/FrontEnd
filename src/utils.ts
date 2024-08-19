@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import { ISessionPayload } from "./app/lib/definitions";
 import CryptoJS from "crypto-js";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+// import { cookies } from "next/headers";
 
 export const encrypt = (data: any): string | Error => {
   try {
@@ -19,15 +21,24 @@ export const encrypt = (data: any): string | Error => {
   }
 };
 
-export const decrypt = (data: any): any => {
+export const decrypt = async (data: any): Promise<any> => {
   try {
+    if (data === undefined) {
+      return new Error("data is undefined");
+    }
+    console.log("decrypt", data);
+    console.log("SESSIONS_SECRET", process.env.SESSION_SECRET);
     if (process.env.SESSION_SECRET) {
       const bytes = CryptoJS.AES.decrypt(data, process.env.SESSION_SECRET);
+      console.log("bytes", bytes);
       if (!bytes) {
         throw new Error("Failed to decrypt data");
       }
-      return bytes.toString(CryptoJS.enc.Utf8);
+      const str = bytes.toString();
+      console.log("bytes str", str);
+      return str;
     } else {
+      throw new Error("env.SESSION_SECRET not defined");
     }
   } catch (error) {
     return handleCaughtError(error);
@@ -56,25 +67,33 @@ export const hashValue = async (value: any): Promise<string | Error> => {
 };
 
 export const validateSession = async (): Promise<boolean> => {
-  // 3. Decrypt the session from the cookie
-  const cookie = cookies().get("session")?.value;
-  const session = await decrypt(cookie);
-  console.log("middleware session", session);
+  console.log("validateSession()");
+  // const cookie = cookies().get("session")?.value;
+  // if (!cookie) {
+  //   return false;
+  // }
+  // const session = await decrypt(cookie);
+  // console.log("middleware session", session);
+  // if (!session?.userId) {
+  //   return false;
+  // }
+  // return true;
 
-  // 5. Redirect to /login if the user is not authenticated
-  if (!session?.userId) {
-    return false;
+  const n = Math.random() * 10;
+
+  if (n > 5) {
+    redirect("/");
+  } else {
+    redirect("/about");
   }
-
-  return true;
 };
 
 export const handleCaughtError = (error: any) => {
   console.log("caught error", error);
-  return new Error(error);
-  // if (error instanceof Error) {
-  //   return error;
-  // }
 
-  // return new Error(error);
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return new error.toString();
 };

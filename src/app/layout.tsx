@@ -1,9 +1,13 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Wrapper from "./wrapper";
 import { decrypt, validateSession } from "@/utils";
 import { cookies } from "next/headers";
+import { privateRoutes, publicRoutes } from "@/routes";
+import HeaderAndSideNavComponent from "./components/HeaderAndSideNav/HeaderAndSideNav";
+import Footer from "./components/Footer/Footer";
+import Providers from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,17 +21,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookie = cookies().get("session")?.value;
-  const session = await decrypt(cookie);
-  console.log("middleware session", session);
-
   // 5. Redirect to /login if the user is not authenticated
-  // if (!session?.userId) {
-  //   return false;
-  // }
 
   // return true;
-  // const userSession = await validateSession();
+
+  // const session = await validateSession();
+  const routes = [...publicRoutes];
+
+  // if (session) {
+  //   routes.push(...privateRoutes);
+  // }
+
   return (
     <html lang="en">
       <head>
@@ -37,7 +41,13 @@ export default async function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
-        <Wrapper userSession={!!session?.userId}>{children}</Wrapper>
+        <Providers>
+          <HeaderAndSideNavComponent session={false} />
+          <main className="flex min-h-screen   p-24">{children}</main>
+          {/* </GlobalContext.Provider> */}
+          {/* </Wrapper> */}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

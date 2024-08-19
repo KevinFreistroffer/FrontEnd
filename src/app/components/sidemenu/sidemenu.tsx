@@ -3,13 +3,19 @@
 import React, { forwardRef, useContext } from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
-import { GlobalContext } from "@/app/wrapper";
 import { usePathname } from "next/navigation";
-import { publicRoutes, routes } from "@/routes";
+import { IRouteConfig, publicRoutes, routes } from "@/routes";
 
-const SideMenu = forwardRef<HTMLDivElement>((props, ref) => {
+interface IProps {
+  children?: React.ReactNode | React.ReactNode[];
+  routes: IRouteConfig[];
+  toggleMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export type Ref = HTMLDivElement;
+
+const SideMenu = forwardRef<Ref, IProps>(({ routes, toggleMenu }, ref) => {
   const pathname = usePathname();
-  const { toggleMenu } = useContext(GlobalContext);
+
   return (
     <div ref={ref} id={styles["sidemenu"]} className="p-6">
       <nav

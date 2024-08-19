@@ -47,6 +47,7 @@ const Form: React.FC = () => {
     });
 
     const data = await response.json();
+    console.log("data", data);
 
     if (data.data.jwtToken) {
       localStorage.setItem("jwtToken", data.data.jwtToken);
@@ -75,7 +76,7 @@ const Form: React.FC = () => {
           type="checkbox"
           name="staySignedIn"
           id="staySignedIn"
-          checked={staySignedIn}
+          defaultChecked={staySignedIn}
           onClick={(e) => {
             // console.log("checked", e.target.value);
             handleStaySignedInChange(!staySignedIn);
